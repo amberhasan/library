@@ -6,6 +6,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class HelloApplication extends Application {
     @Override
@@ -17,7 +19,11 @@ public class HelloApplication extends Application {
         stage.show();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
+        DBMgr dbMgr = DBMgr.getInstance();
+        ResultSet result = dbMgr.executeQuery("Select * from publisher");
+
+        System.out.println(result);
         launch();
     }
 }

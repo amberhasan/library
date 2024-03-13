@@ -10,6 +10,7 @@ module com.amber.library.library {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires java.sql;
 
     opens com.amber.library.library to javafx.fxml;
     exports com.amber.library.library;
