@@ -43,8 +43,8 @@ public class DBMgr {
         return connection;
     }
 
-    public ObservableList<Publishers> getPublishers() {
-        ObservableList<Publishers> publishersList = FXCollections.observableArrayList();
+    public ObservableList<Publisher> getPublishers() {
+        ObservableList<Publisher> publisherList = FXCollections.observableArrayList();
         try (Statement stmt = connection.createStatement()) {
 
             ResultSet result = stmt.executeQuery("Select * from publisher");
@@ -53,18 +53,35 @@ public class DBMgr {
                 int id = result.getInt("PublisherID"); // You can also use column indices, e.g., getInt(1)
                 String name = result.getString("Name");
                 String web = result.getString("Website");
-                publishersList.add(new Publishers(
+                publisherList.add(new Publisher(
                         id, name, web
                 ));
 
                 // Do something with the data
                 System.out.printf("ID: %d, Name: %s, web: %s%n", id, name, web);
             }
-            return publishersList;
+            return publisherList;
         } catch (SQLException e) {
             e.printStackTrace();
-            return publishersList;
+            return publisherList;
         }
+    }
+
+    public Boolean insertBook(String title, String isbn, String deweyDecimal, int publisherId) {
+        String sql = "INSERT INTO Book (Title, ISBN, DeweyDecimal, PublisherID) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, title);
+            pstmt.setString(2, isbn);
+            pstmt.setString(3, deweyDecimal);
+            pstmt.setInt(4, publisherId);
+
+            pstmt.executeUpdate();
+            System.out.println("Book inserted successfully.");
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Inserting book failed: " + e.getMessage());
+        }
+        return false;
     }
 
 

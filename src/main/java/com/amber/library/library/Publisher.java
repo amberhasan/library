@@ -1,11 +1,11 @@
 package com.amber.library.library;
 
-public class Publishers {
+public class Publisher {
     int id;
     String name;
     String website;
 
-    public Publishers(int id, String name, String website) {
+    public Publisher(int id, String name, String website) {
         this.id = id;
         this.name = name;
         this.website = website;

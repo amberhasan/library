@@ -4,15 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8232668f-c7d9-43d1-b5c8-e7799cb50811" name="Changes" comment="Add db connection">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/Publishers.java" afterDir="false" />
+    <list default="true" id="8232668f-c7d9-43d1-b5c8-e7799cb50811" name="Changes" comment="Add data to combox">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/Book.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/DBMgr.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/DBMgr.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/HelloApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/HelloController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/HelloController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/Publishers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/Publisher.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/amber/library/library/hello-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/amber/library/library/hello-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -106,7 +103,7 @@
       <updated>1710265696619</updated>
       <workItem from="1710265697935" duration="2726000" />
       <workItem from="1710339524406" duration="1445000" />
-      <workItem from="1710565331040" duration="4679000" />
+      <workItem from="1710565331040" duration="7963000" />
     </task>
     <task id="LOCAL-00001" summary="Project init">
       <option name="closed" value="true" />
@@ -124,7 +121,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710339540760</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Add data to combox">
+      <option name="closed" value="true" />
+      <created>1710579050586</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1710579050586</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -133,14 +138,15 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Project init" />
     <MESSAGE value="Add db connection" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add db connection" />
+    <MESSAGE value="Add data to combox" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add data to combox" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/amber/library/library/HelloController.java</url>
-          <line>69</line>
+          <line>68</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>

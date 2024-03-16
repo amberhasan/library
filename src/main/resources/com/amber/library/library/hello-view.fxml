@@ -40,10 +40,10 @@
         </HBox>
         <HBox alignment="CENTER" spacing="10">
             <children>
-                <Button fx:id="saveBtn" minWidth="70.0" text="Save" />
-                <Button fx:id="clearBtn" minWidth="70.0" text="Clear" />
-                <Button fx:id="searchBtn" minWidth="70.0" text="Search" />
-                <Button fx:id="deleteBtn" minWidth="70.0" text="Delete" />
+                <Button fx:id="saveBtn" minWidth="70.0" onAction="#onSave" text="Save" />
+                <Button fx:id="clearBtn" minWidth="70.0" onAction="#onClear" text="Clear" />
+                <Button fx:id="searchBtn" minWidth="70.0" onAction="#onSearch" text="Search" />
+                <Button fx:id="deleteBtn" minWidth="70.0" onAction="#onDelete" text="Delete" />
             </children>
         </HBox>
         <TableView fx:id="booksTableView" VBox.vgrow="ALWAYS">
