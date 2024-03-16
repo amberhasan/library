@@ -1,6 +1,11 @@
 package com.amber.library.library;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.sql.*;
 import java.lang.ClassNotFoundException;
+
 public class DBMgr {
 
     private static DBMgr instance;
@@ -38,24 +43,30 @@ public class DBMgr {
         return connection;
     }
 
-    public ResultSet executeQuery(String query) {
+    public ObservableList<Publishers> getPublishers() {
+        ObservableList<Publishers> publishersList = FXCollections.observableArrayList();
         try (Statement stmt = connection.createStatement()) {
-            ResultSet result =  stmt.executeQuery(query);
+
+            ResultSet result = stmt.executeQuery("Select * from publisher");
             while (result.next()) {
                 // Assuming the table has columns 'id', 'name', and 'age'
                 int id = result.getInt("PublisherID"); // You can also use column indices, e.g., getInt(1)
                 String name = result.getString("Name");
                 String web = result.getString("Website");
+                publishersList.add(new Publishers(
+                        id, name, web
+                ));
 
                 // Do something with the data
                 System.out.printf("ID: %d, Name: %s, web: %s%n", id, name, web);
             }
-            return result;
+            return publishersList;
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return publishersList;
         }
     }
+
 
     // Optional: Add a method to close the connection when the application terminates
     public void closeConnection() {

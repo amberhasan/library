@@ -1,16 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.amber.library.library.HelloController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
-
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" spacing="10" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.amber.library.library.HelloController">
+    <children>
+        <Label text="Library Book Entry" />
+        <HBox alignment="CENTER" spacing="10">
+            <children>
+                <Label text="Title" />
+                <TextField fx:id="titleTextField" maxWidth="1.7976931348623157E308" promptText="Enter title" />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" spacing="10">
+            <children>
+                <Label text="Author(s)" />
+                <TextField fx:id="authorsTextField" maxWidth="1.7976931348623157E308" promptText="Enter author(s)" />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" spacing="10">
+            <children>
+                <Label text="ISBN" />
+                <TextField fx:id="isbnTextField" maxWidth="1.7976931348623157E308" promptText="Enter ISBN" />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" spacing="10">
+            <children>
+                <Label text="Dewey Number" />
+                <TextField fx:id="deweyTextField" maxWidth="1.7976931348623157E308" promptText="Enter Dewey Number" />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" spacing="10">
+            <children>
+                <Label text="Publisher" />
+                <ComboBox fx:id="publisherComboBox" maxWidth="1.7976931348623157E308">
+                    <!-- Items can be added here or dynamically in the controller -->
+                </ComboBox>
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" spacing="10">
+            <children>
+                <Button fx:id="saveBtn" minWidth="70.0" text="Save" />
+                <Button fx:id="clearBtn" minWidth="70.0" text="Clear" />
+                <Button fx:id="searchBtn" minWidth="70.0" text="Search" />
+                <Button fx:id="deleteBtn" minWidth="70.0" text="Delete" />
+            </children>
+        </HBox>
+        <TableView fx:id="booksTableView" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="isbnColumn" minWidth="100.0" text="ISBN" />
+                <TableColumn fx:id="titleColumn" minWidth="200.0" text="Title" />
+                <TableColumn fx:id="authorsColumn" minWidth="200.0" text="Author(s)" />
+                <!-- More columns can be added if needed -->
+            </columns>
+        </TableView>
+    </children>
 </VBox>
