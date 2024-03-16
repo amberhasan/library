@@ -7,6 +7,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.collections.FXCollections;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class HelloController {
 
     @FXML
@@ -89,20 +94,24 @@ public class HelloController {
 
     @FXML
     void onDelete(ActionEvent event) {
-        System.out.println("onDelete");
         Book selectedBook = booksTableView.getSelectionModel().getSelectedItem();
-
         if (selectedBook != null) {
-            // Remove the selected item from the ObservableList
-            books.remove(selectedBook); //TODO: Delete from the database as well (it currently only deletes from UI)
-
-            // Show a confirmation message
-            showAlert("Success", "Book deleted successfully.", false);
+            boolean isDeleted = DBMgr.getInstance().deleteBookAndReferences((Integer) selectedBook.getId());
+            if (isDeleted) {
+                // Make sure books is not null before attempting to remove from it
+                if (books != null) {
+                    books.remove(selectedBook);
+                }
+                showAlert("Success", "Book deleted successfully.", false);
+            } else {
+                showAlert("Error", "Failed to delete the book from the database.", true);
+            }
         } else {
-            // No item was selected, show an error message
             showAlert("Error", "Please select a book to delete.", true);
         }
     }
+
+
 
     @FXML
     void onSave(ActionEvent event) {
@@ -156,11 +165,38 @@ public class HelloController {
     }
 
     private ObservableList<Book> getBooks() {
-        books = FXCollections.observableArrayList();
-        // Add some sample books
-        books.add(new Book(1, "The Great Gatsby", "F. Scott Fitzgerald", 1925, 0, 1));
-        books.add(new Book(2, "Moby Dick", "Herman Melville", 1851, 0, 1));
-        // Add more books as needed
+        ObservableList<Book> books = FXCollections.observableArrayList();
+
+        DBMgr dbManager = DBMgr.getInstance();
+        Connection conn = dbManager.getConnection();
+
+        String query = """
+        SELECT b.BookID, p.Title, CONCAT(a.FirstName, ' ', COALESCE(a.MiddleName, ''), ' ', a.LastName) AS AuthorName, p.PublicationDate, pb.NumberOfPages, pb.Language, pb.Genre
+        FROM Book b
+        JOIN Publication p ON b.PublicationID = p.PublicationID
+        JOIN BookAuthor ba ON b.BookID = ba.BookID
+        JOIN Author a ON ba.AuthorID = a.AuthorID
+        JOIN PhysicalBook pb ON b.BookID = pb.BookID
+        """;
+
+        try (Statement stmt = ((Connection) conn).createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                int id = rs.getInt("BookID");
+                String title = rs.getString("Title");
+                String authorName = rs.getString("AuthorName");
+                int publicationYear = rs.getDate("PublicationDate").toLocalDate().getYear();
+                int numberOfPages = rs.getInt("NumberOfPages");
+                // Assuming the 'genre' is represented as an integer in your Book class, otherwise adjust accordingly.
+                String genre = rs.getString("Genre");
+
+                // Assuming your Book class has a constructor that matches these fields
+                books.add(new Book(id, title, authorName, publicationYear, numberOfPages, 1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         return books;
     }

@@ -84,6 +84,56 @@ public class DBMgr {
         return false;
     }
 
+    public Boolean deleteBookAndReferences(int bookId) {
+        try {
+            connection.setAutoCommit(false); // Start transaction
+
+            // 1. Delete references in dependent tables
+            String[] dependentTables = new String[]{"PhysicalBook", "AudioBook", "EBook", "BookAuthor"};
+            for (String table : dependentTables) {
+                String sqlDeleteReferences = String.format("DELETE FROM %s WHERE BookID = ?", table);
+                try (PreparedStatement pstmtDeleteReferences = connection.prepareStatement(sqlDeleteReferences)) {
+                    pstmtDeleteReferences.setInt(1, bookId);
+                    pstmtDeleteReferences.executeUpdate();
+                }
+            }
+
+            // 2. Delete the book
+            String sqlDeleteBook = "DELETE FROM Book WHERE BookID = ?";
+            try (PreparedStatement pstmtDeleteBook = connection.prepareStatement(sqlDeleteBook)) {
+                pstmtDeleteBook.setInt(1, bookId);
+                int affectedRows = pstmtDeleteBook.executeUpdate();
+                if (affectedRows == 0) {
+                    connection.rollback(); // Rollback if no book was deleted
+                    System.out.println("No book found with the specified ID, rolling back.");
+                    return false;
+                }
+            }
+
+            connection.commit(); // Commit transaction
+            System.out.println("Book and its references deleted successfully.");
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Deleting book failed: " + e.getMessage());
+            try {
+                if (connection != null) {
+                    connection.rollback(); // Attempt to roll back on error
+                    System.out.println("Transaction is rolled back.");
+                }
+            } catch (SQLException ex) {
+                System.out.println("Error rolling back transaction: " + ex.getMessage());
+            }
+            return false;
+        } finally {
+            try {
+                connection.setAutoCommit(true); // Reset auto-commit behavior
+            } catch (SQLException e) {
+                System.out.println("Error resetting auto-commit: " + e.getMessage());
+            }
+        }
+    }
+
+
 
     // Optional: Add a method to close the connection when the application terminates
     public void closeConnection() {
