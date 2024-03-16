@@ -50,6 +50,8 @@ public class HelloController {
 
     private final DBMgr dbMgr;
 
+    private ObservableList<Book> books;
+
 
     public HelloController() {
         dbMgr = DBMgr.getInstance();
@@ -57,7 +59,6 @@ public class HelloController {
 
     @FXML
     private void initialize() {
-        // This method is automatically called after FXML fields are injected.
         initializePublishers();
         initializeTableView();
     }
@@ -76,11 +77,31 @@ public class HelloController {
     @FXML
     void onClear(ActionEvent event) {
         System.out.println("onClear");
+        // Clear text fields
+        titleTextField.setText("");
+        authorsTextField.setText("");
+        isbnTextField.setText("");
+        deweyTextField.setText("");
+
+        // Reset ComboBox selection
+        publisherComboBox.setValue(null);
     }
 
     @FXML
     void onDelete(ActionEvent event) {
         System.out.println("onDelete");
+        Book selectedBook = booksTableView.getSelectionModel().getSelectedItem();
+
+        if (selectedBook != null) {
+            // Remove the selected item from the ObservableList
+            books.remove(selectedBook);
+
+            // Show a confirmation message
+            showAlert("Success", "Book deleted successfully.", false);
+        } else {
+            // No item was selected, show an error message
+            showAlert("Error", "Please select a book to delete.", true);
+        }
     }
 
     @FXML
@@ -100,11 +121,6 @@ public class HelloController {
                 return; // Exit the method if validation fails
             }
 
-            // Simple ISBN validation (adjust regex as needed for your use case)
-//            if (!isbn.matches("\\d{13}")) {
-//                showAlert("Validation Error", "ISBN must be 13 digits.");
-//                return; // Exit the method if validation fails
-//            }
             if (dbMgr.insertBook(title, isbn, dewey, publisher.getId())) {
                 showAlert("Success", "Data saved successfully.", false);
             } else {
@@ -140,7 +156,7 @@ public class HelloController {
     }
 
     private ObservableList<Book> getBooks() {
-        ObservableList<Book> books = FXCollections.observableArrayList();
+        books = FXCollections.observableArrayList();
         // Add some sample books
         books.add(new Book(1, "The Great Gatsby", "F. Scott Fitzgerald", 1925, 0, 1));
         books.add(new Book(2, "Moby Dick", "Herman Melville", 1851, 0, 1));
