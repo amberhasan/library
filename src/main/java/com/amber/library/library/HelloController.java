@@ -94,7 +94,7 @@ public class HelloController {
 
         if (selectedBook != null) {
             // Remove the selected item from the ObservableList
-            books.remove(selectedBook);
+            books.remove(selectedBook); //TODO: Delete from the database as well (it currently only deletes from UI)
 
             // Show a confirmation message
             showAlert("Success", "Book deleted successfully.", false);

@@ -12,7 +12,7 @@ public class DBMgr {
     private Connection connection;
 
     private final String url = "jdbc:mysql://localhost:3306/library_db"; // Adjust this to your database
-    private final String user = "root"; // Your database username
+    private final String user = "root2"; // Your database username
     private final String password = "admin"; // Your database password
 
     private DBMgr() {
@@ -68,7 +68,7 @@ public class DBMgr {
     }
 
     public Boolean insertBook(String title, String isbn, String deweyDecimal, int publisherId) {
-        String sql = "INSERT INTO Book (Title, ISBN, DeweyDecimal, PublisherID) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Book (Title, ISBN, DeweyDecimal, PublisherID) VALUES (?, ?, ?, ?)"; //TODO: Where to enter title in DB
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, title);
             pstmt.setString(2, isbn);
