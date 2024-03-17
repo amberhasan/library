@@ -132,6 +132,7 @@ public class HelloController {
 
             if (dbMgr.insertBook(title, isbn, dewey, publisher.getId(), 100, "English", "Fiction")) {
                 showAlert("Success", "Data saved successfully.", false);
+                booksTableView.setItems(getBooks()); // Refresh the TableView
             } else {
                 showAlert("Failed", "Data not saved successfully.", true);
             }

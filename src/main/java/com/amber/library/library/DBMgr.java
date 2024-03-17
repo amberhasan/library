@@ -67,60 +67,93 @@ public class DBMgr {
         }
     }
 
-
     public boolean insertBook(String title, String isbn, String deweyDecimal, int publisherId, int numberOfPages, String language, String genre) {
+        Connection conn = null;
         try {
+            conn = getConnection();
+            conn.setAutoCommit(false); // Start transaction
+
             // Insert into Publication table
-            int publicationId = insertPublication(title, publisherId);
+            int publicationId = insertPublication(conn, title, publisherId);
+            System.out.println("Publication inserted successfully with ID: " + publicationId);
 
             // Insert into Book table
-            int bookId = insertBookEntry(publicationId, isbn, deweyDecimal);
+            int bookId = insertBookEntry(conn, publicationId, isbn, deweyDecimal);
+            System.out.println("Book inserted successfully with ID: " + bookId);
 
             // Insert into PhysicalBook table
-            insertPhysicalBook(bookId, numberOfPages, language, genre);
+            insertPhysicalBook(conn, bookId, numberOfPages, language, genre);
+            System.out.println("PhysicalBook details inserted successfully for BookID: " + bookId);
 
-            System.out.println("Book inserted successfully.");
+            conn.commit(); // Commit transaction
+            System.out.println("Transaction committed successfully.");
             return true;
         } catch (SQLException e) {
             System.out.println("Inserting book failed: " + e.getMessage());
+            if (conn != null) {
+                try {
+                    conn.rollback(); // Rollback on error
+                    System.out.println("Transaction rolled back.");
+                } catch (SQLException ex) {
+                    System.out.println("Rollback failed: " + ex.getMessage());
+                }
+            }
             return false;
-        }
-    }
-
-    private int insertPublication(String title, int publisherId) throws SQLException {
-        String sql = "INSERT INTO Publication (Title, PublisherID) VALUES (?, ?)";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            pstmt.setString(1, title);
-            pstmt.setInt(2, publisherId);
-            pstmt.executeUpdate();
-            ResultSet rs = pstmt.getGeneratedKeys();
-            if (rs.next()) {
-                return rs.getInt(1); // Returns the auto-generated publication ID
-            } else {
-                throw new SQLException("Inserting publication failed, no ID obtained.");
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true); // Reset default commit behavior
+                } catch (SQLException e) {
+                    System.out.println("Error resetting auto-commit: " + e.getMessage());
+                }
             }
         }
     }
 
-    private int insertBookEntry(int publicationId, String isbn, String deweyDecimal) throws SQLException {
+    private int insertPublication(Connection conn, String title, int publisherId) throws SQLException {
+        String sql = "INSERT INTO Publication (Title, PublisherID, Type) VALUES (?, ?, 'Book')";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setString(1, title);
+            pstmt.setInt(2, publisherId);
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating publication failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Creating publication failed, no ID obtained.");
+                }
+            }
+        }
+    }
+
+    private int insertBookEntry(Connection conn, int publicationId, String isbn, String deweyDecimal) throws SQLException {
         String sql = "INSERT INTO Book (PublicationID, ISBN, DeweyDecimalSystemNumber) VALUES (?, ?, ?)";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setInt(1, publicationId);
             pstmt.setString(2, isbn);
             pstmt.setString(3, deweyDecimal);
-            pstmt.executeUpdate();
-            ResultSet rs = pstmt.getGeneratedKeys();
-            if (rs.next()) {
-                return rs.getInt(1); // Returns the auto-generated book ID
-            } else {
-                throw new SQLException("Inserting book entry failed, no ID obtained.");
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating book entry failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Creating book entry failed, no ID obtained.");
+                }
             }
         }
     }
 
-    private void insertPhysicalBook(int bookId, int numberOfPages, String language, String genre) throws SQLException {
+    private void insertPhysicalBook(Connection conn, int bookId, int numberOfPages, String language, String genre) throws SQLException {
         String sql = "INSERT INTO PhysicalBook (BookID, NumberOfPages, Language, Genre) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, bookId);
             pstmt.setInt(2, numberOfPages);
             pstmt.setString(3, language);
@@ -128,6 +161,7 @@ public class DBMgr {
             pstmt.executeUpdate();
         }
     }
+
 
     public Boolean deleteBookAndReferences(int bookId) {
         try {
