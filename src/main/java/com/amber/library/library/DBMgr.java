@@ -67,6 +67,15 @@ public class DBMgr {
         }
     }
 
+    private void linkBookToAuthor(Connection conn, int bookId, int authorId) throws SQLException {
+        String sql = "INSERT INTO BookAuthor (BookID, AuthorID) VALUES (?, ?)";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, bookId);
+            pstmt.setInt(2, authorId);
+            pstmt.executeUpdate();
+        }
+    }
+
     public boolean insertBook(String title, String isbn, String deweyDecimal, int publisherId, int numberOfPages, String language, String genre) {
         Connection conn = null;
         try {
@@ -84,6 +93,10 @@ public class DBMgr {
             // Insert into PhysicalBook table
             insertPhysicalBook(conn, bookId, numberOfPages, language, genre);
             System.out.println("PhysicalBook details inserted successfully for BookID: " + bookId);
+
+            // Link the book to an author (e.g., AuthorID = 1 for simplicity)
+            linkBookToAuthor(conn, bookId, 1); // Assuming AuthorID = 1 exists
+            System.out.println("Book linked to Author successfully.");
 
             conn.commit(); // Commit transaction
             System.out.println("Transaction committed successfully.");
@@ -109,6 +122,7 @@ public class DBMgr {
             }
         }
     }
+
 
     private int insertPublication(Connection conn, String title, int publisherId) throws SQLException {
         String sql = "INSERT INTO Publication (Title, PublisherID, Type) VALUES (?, ?, 'Book')";
