@@ -226,6 +226,35 @@ public class DBMgr {
         }
     }
 
+    public ObservableList<Book> searchBooks(String title) {
+        ObservableList<Book> books = FXCollections.observableArrayList();
+        String sql = """
+        SELECT b.BookID, p.Title, CONCAT(a.FirstName, ' ', COALESCE(a.MiddleName, ''), ' ', a.LastName) AS AuthorName, 
+        p.PublicationDate, pb.NumberOfPages, pb.Language, pb.Genre
+        FROM Book b
+        JOIN Publication p ON b.PublicationID = p.PublicationID
+        LEFT JOIN BookAuthor ba ON b.BookID = ba.BookID
+        LEFT JOIN Author a ON ba.AuthorID = a.AuthorID
+        LEFT JOIN PhysicalBook pb ON b.BookID = pb.BookID
+        WHERE p.Title LIKE ?
+        """;
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, "%" + title + "%"); // Use the title in the query
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("BookID");
+                String bookTitle = rs.getString("Title");
+                String authorName = rs.getString("AuthorName"); // Handle potential nulls accordingly
+                String genre = rs.getString("Genre"); // Same as above
+                // Assuming your Book class has a constructor that matches these fields
+                books.add(new Book(id, bookTitle, authorName, 123, 123, 123));
+            }
+        } catch (SQLException e) {
+            System.out.println("Search failed: " + e.getMessage());
+        }
+        return books;
+    }
 
 
     // Optional: Add a method to close the connection when the application terminates
@@ -239,4 +268,6 @@ public class DBMgr {
             }
         }
     }
+
+
 }

@@ -109,6 +109,7 @@ public class HelloController {
         } else {
             showAlert("Error", "Please select a book to delete.", true);
         }
+        refreshBooks();
     }
 
 
@@ -141,12 +142,16 @@ public class HelloController {
         } catch (Exception ex) {
             System.out.println("onSave failed " + ex.getMessage());
         }
+        refreshBooks();
     }
 
     @FXML
-    void onSearch(ActionEvent event) {
-        System.out.println("onSearch");
+    void onSearch() {
+        String searchQuery = titleTextField.getText().trim();
+        ObservableList<Book> searchResults = dbMgr.searchBooks(searchQuery);
+        booksTableView.setItems(searchResults);
     }
+
 
     private void showAlert(String title, String message, Boolean isError) {
         Alert alert = new Alert(isError ? Alert.AlertType.ERROR : Alert.AlertType.INFORMATION);
@@ -165,6 +170,10 @@ public class HelloController {
         booksTableView.setItems(getBooks());
     }
 
+    public void refreshBooks() {
+        ObservableList<Book> allBooks = getBooks(); // Fetch all books
+        booksTableView.setItems(allBooks); // Update the TableView
+    }
     private ObservableList<Book> getBooks() {
         ObservableList<Book> books = FXCollections.observableArrayList();
 
@@ -172,28 +181,30 @@ public class HelloController {
         Connection conn = dbManager.getConnection();
 
         String query = """
-        SELECT b.BookID, p.Title, CONCAT(a.FirstName, ' ', COALESCE(a.MiddleName, ''), ' ', a.LastName) AS AuthorName, p.PublicationDate, pb.NumberOfPages, pb.Language, pb.Genre
-        FROM Book b
-        JOIN Publication p ON b.PublicationID = p.PublicationID
-        JOIN BookAuthor ba ON b.BookID = ba.BookID
-        JOIN Author a ON ba.AuthorID = a.AuthorID
-        JOIN PhysicalBook pb ON b.BookID = pb.BookID
-        """;
+    SELECT b.BookID, p.Title, CONCAT(a.FirstName, ' ', COALESCE(a.MiddleName, ''), ' ', a.LastName) AS AuthorName, p.PublicationDate, pb.NumberOfPages, pb.Language, pb.Genre
+    FROM Book b
+    JOIN Publication p ON b.PublicationID = p.PublicationID
+    JOIN BookAuthor ba ON b.BookID = ba.BookID
+    JOIN Author a ON ba.AuthorID = a.AuthorID
+    JOIN PhysicalBook pb ON b.BookID = pb.BookID
+    """;
 
-        try (Statement stmt = ((Connection) conn).createStatement();
+        try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
                 int id = rs.getInt("BookID");
                 String title = rs.getString("Title");
                 String authorName = rs.getString("AuthorName");
-                int publicationYear = rs.getDate("PublicationDate").toLocalDate().getYear();
+                // Handle potential null values explicitly
+                authorName = authorName != null ? authorName : "null";
+                int publicationYear = rs.getDate("PublicationDate") != null ? rs.getDate("PublicationDate").toLocalDate().getYear() : 0; // Use 0 or some default for null publicationYear
                 int numberOfPages = rs.getInt("NumberOfPages");
-                // Assuming the 'genre' is represented as an integer in your Book class, otherwise adjust accordingly.
                 String genre = rs.getString("Genre");
+                genre = genre != null ? genre : "null";
 
-                // Assuming your Book class has a constructor that matches these fields
-                books.add(new Book(id, title, authorName, publicationYear, numberOfPages, 1));
+                // Assuming your Book class has a constructor that matches these fields and handles nulls
+                books.add(new Book(id, title, authorName, publicationYear, numberOfPages, 1)); // Adjust constructor call as necessary
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -201,6 +212,7 @@ public class HelloController {
 
         return books;
     }
+
 
 
 }
