@@ -67,21 +67,66 @@ public class DBMgr {
         }
     }
 
-    public Boolean insertBook(String title, String isbn, String deweyDecimal, int publisherId) {
-        String sql = "INSERT INTO Book (Title, ISBN, DeweyDecimal, PublisherID) VALUES (?, ?, ?, ?)"; //TODO: Where to enter title in DB
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, title);
-            pstmt.setString(2, isbn);
-            pstmt.setString(3, deweyDecimal);
-            pstmt.setInt(4, publisherId);
 
-            pstmt.executeUpdate();
+    public boolean insertBook(String title, String isbn, String deweyDecimal, int publisherId, int numberOfPages, String language, String genre) {
+        try {
+            // Insert into Publication table
+            int publicationId = insertPublication(title, publisherId);
+
+            // Insert into Book table
+            int bookId = insertBookEntry(publicationId, isbn, deweyDecimal);
+
+            // Insert into PhysicalBook table
+            insertPhysicalBook(bookId, numberOfPages, language, genre);
+
             System.out.println("Book inserted successfully.");
             return true;
         } catch (SQLException e) {
             System.out.println("Inserting book failed: " + e.getMessage());
+            return false;
         }
-        return false;
+    }
+
+    private int insertPublication(String title, int publisherId) throws SQLException {
+        String sql = "INSERT INTO Publication (Title, PublisherID) VALUES (?, ?)";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pstmt.setString(1, title);
+            pstmt.setInt(2, publisherId);
+            pstmt.executeUpdate();
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1); // Returns the auto-generated publication ID
+            } else {
+                throw new SQLException("Inserting publication failed, no ID obtained.");
+            }
+        }
+    }
+
+    private int insertBookEntry(int publicationId, String isbn, String deweyDecimal) throws SQLException {
+        String sql = "INSERT INTO Book (PublicationID, ISBN, DeweyDecimalSystemNumber) VALUES (?, ?, ?)";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pstmt.setInt(1, publicationId);
+            pstmt.setString(2, isbn);
+            pstmt.setString(3, deweyDecimal);
+            pstmt.executeUpdate();
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1); // Returns the auto-generated book ID
+            } else {
+                throw new SQLException("Inserting book entry failed, no ID obtained.");
+            }
+        }
+    }
+
+    private void insertPhysicalBook(int bookId, int numberOfPages, String language, String genre) throws SQLException {
+        String sql = "INSERT INTO PhysicalBook (BookID, NumberOfPages, Language, Genre) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, bookId);
+            pstmt.setInt(2, numberOfPages);
+            pstmt.setString(3, language);
+            pstmt.setString(4, genre);
+            pstmt.executeUpdate();
+        }
     }
 
     public Boolean deleteBookAndReferences(int bookId) {

@@ -130,7 +130,7 @@ public class HelloController {
                 return; // Exit the method if validation fails
             }
 
-            if (dbMgr.insertBook(title, isbn, dewey, publisher.getId())) {
+            if (dbMgr.insertBook(title, isbn, dewey, publisher.getId(), 100, "English", "Fiction")) {
                 showAlert("Success", "Data saved successfully.", false);
             } else {
                 showAlert("Failed", "Data not saved successfully.", true);
