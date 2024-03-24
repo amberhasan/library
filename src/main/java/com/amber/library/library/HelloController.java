@@ -57,6 +57,12 @@ public class HelloController {
 
     private ObservableList<Book> books;
 
+    private  String mode = "Insert";
+
+    ObservableList<Publisher> publisherList;
+
+    private Book bookToUpdate;
+
 
     public HelloController() {
         dbMgr = DBMgr.getInstance();
@@ -71,12 +77,21 @@ public class HelloController {
     public void initializePublishers() {
         try {
 
-            ObservableList<Publisher> publisherList = dbMgr.getPublishers();
+            publisherList = dbMgr.getPublishers();
             publisherComboBox.setItems(publisherList);
         } catch (Exception ex) {
             System.out.println("initializePublishers failed " + ex.getMessage());
         }
 
+    }
+
+    public Publisher getPublisher(int id){
+        for (Publisher publisher : publisherList) {
+            if (publisher.getId() == id) { // Assuming getId() method exists
+                return publisher;
+            }
+        }
+        return null; // Return null or throw an exception if not found
     }
 
     @FXML
@@ -87,7 +102,8 @@ public class HelloController {
         authorsTextField.setText("");
         isbnTextField.setText("");
         deweyTextField.setText("");
-
+        mode = "Insert";
+        bookToUpdate = null;
         // Reset ComboBox selection
         publisherComboBox.setValue(null);
     }
@@ -131,13 +147,25 @@ public class HelloController {
                 return; // Exit the method if validation fails
             }
 
-            if (dbMgr.insertBook(title, authorName, isbn, dewey, publisher.getId(), 100, "English", "Fiction")) {
-                showAlert("Success", "Data saved successfully.", false);
-                booksTableView.setItems(getBooks()); // Refresh the TableView
-            } else {
-                showAlert("Failed", "Data not saved successfully.", true);
+            if(mode.equals("Update")){
+                if (dbMgr.updateBook(title, publisher.getId(), bookToUpdate)) {
+                    showAlert("Success", "Data updated successfully.", false);
+                    booksTableView.setItems(getBooks()); // Refresh the TableView
+                } else {
+                    showAlert("Failed", "Data not saved successfully.", true);
+                }
+
+            }else{
+                if (dbMgr.insertBook(title, authorName, isbn, dewey, publisher.getId(), 100, "English", "Genre")) {
+                    showAlert("Success", "Data saved successfully.", false);
+                    booksTableView.setItems(getBooks()); // Refresh the TableView
+                } else {
+                    showAlert("Failed", "Data not saved successfully.", true);
+                }
             }
 
+
+            onClear(null);
 
         } catch (Exception ex) {
             System.out.println("onSave failed " + ex.getMessage());
@@ -168,6 +196,24 @@ public class HelloController {
 
         // Add books to the table view
         booksTableView.setItems(getBooks());
+
+        booksTableView.setRowFactory(tv -> {
+            TableRow<Book> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 1 && (!row.isEmpty())) {
+                    Book bookData = row.getItem();
+                    bookToUpdate = bookData;
+                    System.out.println("Single click on: " + bookData);
+                    mode = "Update";
+                    titleTextField.setText(bookData.getTitle());
+                    authorsTextField.setText(bookData.getAuthors());
+                    isbnTextField.setText(bookData.getIsbn());
+                    deweyTextField.setText(""+bookData.getDewey());
+                    publisherComboBox.setValue(getPublisher(bookData.getPublisherId().intValue()));
+                }
+            });
+            return row;
+        });
     }
 
     public void refreshBooks() {
@@ -181,7 +227,7 @@ public class HelloController {
         Connection conn = dbManager.getConnection();
 
         String query = """
-    SELECT b.BookID, b.ISBN, p.Title, CONCAT(a.FirstName, ' ', COALESCE(a.MiddleName, ''), ' ', a.LastName) AS AuthorName, p.PublicationDate, pb.NumberOfPages, pb.Language, pb.Genre
+    SELECT b.BookID, b.ISBN, b.DeweyDecimalSystemNumber, p.Title, CONCAT(a.FirstName, ' ', COALESCE(a.MiddleName, ''), ' ', a.LastName) AS AuthorName, p.PublicationDate, pb.NumberOfPages, pb.Language, pb.Genre
     FROM Book b
     JOIN Publication p ON b.PublicationID = p.PublicationID
     JOIN BookAuthor ba ON b.BookID = ba.BookID
@@ -197,6 +243,7 @@ public class HelloController {
                 String title = rs.getString("Title");
                 String authorName = rs.getString("AuthorName");
                 String isbn = rs.getString("ISBN");
+                String dewey = rs.getString("DeweyDecimalSystemNumber");
                 // Handle potential null values explicitly
                 authorName = authorName != null ? authorName : "null";
                 int publicationYear = rs.getDate("PublicationDate") != null ? rs.getDate("PublicationDate").toLocalDate().getYear() : 0; // Use 0 or some default for null publicationYear
@@ -205,7 +252,7 @@ public class HelloController {
                 genre = genre != null ? genre : "null";
 
                 // Assuming your Book class has a constructor that matches these fields and handles nulls
-                books.add(new Book(id, title, authorName, isbn, 123, 1)); // Adjust constructor call as necessary
+                books.add(new Book(id, title, authorName, isbn, dewey, 1)); // Adjust constructor call as necessary
             }
         } catch (SQLException e) {
             e.printStackTrace();

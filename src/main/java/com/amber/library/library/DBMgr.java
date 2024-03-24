@@ -127,6 +127,47 @@ public class DBMgr {
         }
     }
 
+    public boolean updateBook(String title, int publisherId, Book bookToUpdate ) {
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            conn.setAutoCommit(false); // Start transaction
+
+            String sql = "UPDATE Publication SET Title = ?, Type = 'Book' WHERE title = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, title); // Assuming 'title' holds the new title value
+                pstmt.setString(2, bookToUpdate.getTitle()); // Assuming 'publicationId' is the ID of the publication to update
+                int affectedRows = pstmt.executeUpdate();
+                if (affectedRows == 0) {
+                    throw new SQLException("Updating publication failed, no rows affected.");
+                }
+            }
+
+            conn.commit(); // Commit transaction
+            System.out.println("Transaction committed successfully.");
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Updating book failed: " + e.getMessage());
+            if (conn != null) {
+                try {
+                    conn.rollback(); // Rollback on error
+                    System.out.println("Transaction rolled back.");
+                } catch (SQLException ex) {
+                    System.out.println("Rollback failed: " + ex.getMessage());
+                }
+            }
+            return false;
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true); // Reset default commit behavior
+                } catch (SQLException e) {
+                    System.out.println("Error resetting auto-commit: " + e.getMessage());
+                }
+            }
+        }
+    }
+
 
     private int insertPublication(Connection conn, String title, int publisherId) throws SQLException {
         String sql = "INSERT INTO Publication (Title, PublisherID, Type) VALUES (?, ?, 'Book')";
@@ -168,27 +209,6 @@ public class DBMgr {
             }
         }
     }
-
-    private int insertBookAuthor(Connection conn, int bookId, int authorId) throws SQLException {
-        String sql = "INSERT INTO BookAuthor (BookID, AuthorID) VALUES (?, ?)";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            pstmt.setInt(1, bookId);
-            pstmt.setInt(2, authorId);
-            int affectedRows = pstmt.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("Creating author failed, no rows affected.");
-            }
-
-            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    return generatedKeys.getInt(1);
-                } else {
-                    throw new SQLException("Creating author failed, no ID obtained.");
-                }
-            }
-        }
-    }
-
 
     private int insertBookEntry(Connection conn, int publicationId, String isbn, String deweyDecimal) throws SQLException {
         String sql = "INSERT INTO Book (PublicationID, ISBN, DeweyDecimalSystemNumber) VALUES (?, ?, ?)";
@@ -291,10 +311,12 @@ public class DBMgr {
             while (rs.next()) {
                 int id = rs.getInt("BookID");
                 String bookTitle = rs.getString("Title");
+                String isbn = rs.getString("ISBN");
+                String dewey = rs.getString("DeweyDecimalSystemNumber");
                 String authorName = rs.getString("AuthorName"); // Handle potential nulls accordingly
                 String genre = rs.getString("Genre"); // Same as above
                 // Assuming your Book class has a constructor that matches these fields
-                books.add(new Book(id, bookTitle, authorName, "123", 123, 123));
+                books.add(new Book(id, bookTitle, authorName, isbn, dewey, 123));
             }
         } catch (SQLException e) {
             System.out.println("Search failed: " + e.getMessage());

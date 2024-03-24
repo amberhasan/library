@@ -1,12 +1,14 @@
 package com.amber.library.library;
 
 public class Book {
-    Number id;
-    String title;
-    String authors;
-    String isbn;
-    Number dewey;
-    Number publisherId;
+    private Number id;
+    private String title;
+    private String authors;
+    private String isbn;
+    private String dewey;
+    private Number publisherId;
+
+    private Publisher publisher;
     public Number getId() {
         return id;
     }
@@ -39,11 +41,11 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public Number getDewey() {
+    public String getDewey() {
         return dewey;
     }
 
-    public void setDewey(Number dewey) {
+    public void setDewey(String dewey) {
         this.dewey = dewey;
     }
 
@@ -55,9 +57,15 @@ public class Book {
         this.publisherId = publisherId;
     }
 
+    public Publisher getPublisher() {
+        return publisher;
+    }
 
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
+    }
 
-    public Book(Number id, String title, String authors, String isbn, Number dewey, Number publisherId) {
+    public Book(Number id, String title, String authors, String isbn, String dewey, Number publisherId) {
         this.id = id;
         this.title = title;
         this.authors = authors;
