@@ -120,18 +120,18 @@ public class HelloController {
         try {
             // Collect input values
             String title = titleTextField.getText().trim();
-            String authors = authorsTextField.getText().trim();
+            String authorName = authorsTextField.getText().trim();
             String isbn = isbnTextField.getText().trim();
             String dewey = deweyTextField.getText().trim();
             Publisher publisher = publisherComboBox.getValue();
 
             // Validate inputs
-            if (title.isEmpty() || authors.isEmpty() || isbn.isEmpty() || dewey.isEmpty() || publisher == null) {
+            if (title.isEmpty() || authorName.isEmpty() || isbn.isEmpty() || dewey.isEmpty() || publisher == null) {
                 showAlert("Validation Error", "All fields are required.", true);
                 return; // Exit the method if validation fails
             }
 
-            if (dbMgr.insertBook(title, isbn, dewey, publisher.getId(), 100, "English", "Fiction")) {
+            if (dbMgr.insertBook(title, authorName, isbn, dewey, publisher.getId(), 100, "English", "Fiction")) {
                 showAlert("Success", "Data saved successfully.", false);
                 booksTableView.setItems(getBooks()); // Refresh the TableView
             } else {

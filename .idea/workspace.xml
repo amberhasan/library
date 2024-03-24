@@ -9,6 +9,9 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/DBMgr.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/DBMgr.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/HelloController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/HelloController.java" afterDir="false" />
     </list>
+    <list id="9ea1c41c-e1a3-4a4c-9db8-924fda1b2467" name="Changes by Junaid" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/DBMgr.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/DBMgr.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,6 +19,16 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="LineStatusTrackerManager">
+    <file path="$PROJECT_DIR$/src/main/java/com/amber/library/library/DBMgr.java">
+      <ranges>
+        <range start1="78" end1="79" start2="78" end2="79" changelist="c70044f5-c564-4f6a-a9e5-4ebdc5b009fb" />
+        <range start1="88" end1="88" start2="88" end2="92" changelist="c70044f5-c564-4f6a-a9e5-4ebdc5b009fb" />
+        <range start1="97" end1="98" start2="101" end2="102" changelist="9ea1c41c-e1a3-4a4c-9db8-924fda1b2467" />
+        <range start1="145" end1="145" start2="149" end2="191" changelist="c70044f5-c564-4f6a-a9e5-4ebdc5b009fb" />
+      </ranges>
+    </file>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
@@ -25,17 +38,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.HelloApplication.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Amber/Desktop/Library&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.HelloApplication.executor": "Debug",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Amber/Desktop/Library",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -64,5 +77,16 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/amber/library/library/DBMgr.java</url>
+          <line>85</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

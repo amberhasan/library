@@ -76,7 +76,7 @@ public class DBMgr {
         }
     }
 
-    public boolean insertBook(String title, String isbn, String deweyDecimal, int publisherId, int numberOfPages, String language, String genre) {
+    public boolean insertBook(String title, String authorName, String isbn, String deweyDecimal, int publisherId, int numberOfPages, String language, String genre) {
         Connection conn = null;
         try {
             conn = getConnection();
@@ -85,6 +85,10 @@ public class DBMgr {
             // Insert into Publication table
             int publicationId = insertPublication(conn, title, publisherId);
             System.out.println("Publication inserted successfully with ID: " + publicationId);
+
+            // Insert into Author table
+            int authorId = insertAuthor(conn, authorName);
+            System.out.println("Author inserted successfully with ID: " + authorId);
 
             // Insert into Book table
             int bookId = insertBookEntry(conn, publicationId, isbn, deweyDecimal);
@@ -95,7 +99,7 @@ public class DBMgr {
             System.out.println("PhysicalBook details inserted successfully for BookID: " + bookId);
 
             // Link the book to an author (e.g., AuthorID = 1 for simplicity)
-            linkBookToAuthor(conn, bookId, 1); // Assuming AuthorID = 1 exists
+            linkBookToAuthor(conn, bookId, authorId); // Assuming AuthorID = 1 exists
             System.out.println("Book linked to Author successfully.");
 
             conn.commit(); // Commit transaction
@@ -143,6 +147,48 @@ public class DBMgr {
             }
         }
     }
+
+    private int insertAuthor(Connection conn, String authorName) throws SQLException {
+        String sql = "INSERT INTO Author (FirstName, MiddleName, LastName) VALUES (?, ?, ?)";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setString(1, authorName);
+            pstmt.setString(2, "");
+            pstmt.setString(3, "");
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating author failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Creating author failed, no ID obtained.");
+                }
+            }
+        }
+    }
+
+    private int insertBookAuthor(Connection conn, int bookId, int authorId) throws SQLException {
+        String sql = "INSERT INTO BookAuthor (BookID, AuthorID) VALUES (?, ?)";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setInt(1, bookId);
+            pstmt.setInt(2, authorId);
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating author failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Creating author failed, no ID obtained.");
+                }
+            }
+        }
+    }
+
 
     private int insertBookEntry(Connection conn, int publicationId, String isbn, String deweyDecimal) throws SQLException {
         String sql = "INSERT INTO Book (PublicationID, ISBN, DeweyDecimalSystemNumber) VALUES (?, ?, ?)";
