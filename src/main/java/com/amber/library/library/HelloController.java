@@ -181,7 +181,7 @@ public class HelloController {
         Connection conn = dbManager.getConnection();
 
         String query = """
-    SELECT b.BookID, p.Title, CONCAT(a.FirstName, ' ', COALESCE(a.MiddleName, ''), ' ', a.LastName) AS AuthorName, p.PublicationDate, pb.NumberOfPages, pb.Language, pb.Genre
+    SELECT b.BookID, b.ISBN, p.Title, CONCAT(a.FirstName, ' ', COALESCE(a.MiddleName, ''), ' ', a.LastName) AS AuthorName, p.PublicationDate, pb.NumberOfPages, pb.Language, pb.Genre
     FROM Book b
     JOIN Publication p ON b.PublicationID = p.PublicationID
     JOIN BookAuthor ba ON b.BookID = ba.BookID
@@ -196,6 +196,7 @@ public class HelloController {
                 int id = rs.getInt("BookID");
                 String title = rs.getString("Title");
                 String authorName = rs.getString("AuthorName");
+                String isbn = rs.getString("ISBN");
                 // Handle potential null values explicitly
                 authorName = authorName != null ? authorName : "null";
                 int publicationYear = rs.getDate("PublicationDate") != null ? rs.getDate("PublicationDate").toLocalDate().getYear() : 0; // Use 0 or some default for null publicationYear
@@ -204,7 +205,7 @@ public class HelloController {
                 genre = genre != null ? genre : "null";
 
                 // Assuming your Book class has a constructor that matches these fields and handles nulls
-                books.add(new Book(id, title, authorName, publicationYear, numberOfPages, 1)); // Adjust constructor call as necessary
+                books.add(new Book(id, title, authorName, isbn, 123, 1)); // Adjust constructor call as necessary
             }
         } catch (SQLException e) {
             e.printStackTrace();

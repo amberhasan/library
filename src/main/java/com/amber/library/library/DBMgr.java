@@ -294,7 +294,7 @@ public class DBMgr {
                 String authorName = rs.getString("AuthorName"); // Handle potential nulls accordingly
                 String genre = rs.getString("Genre"); // Same as above
                 // Assuming your Book class has a constructor that matches these fields
-                books.add(new Book(id, bookTitle, authorName, 123, 123, 123));
+                books.add(new Book(id, bookTitle, authorName, "123", 123, 123));
             }
         } catch (SQLException e) {
             System.out.println("Search failed: " + e.getMessage());

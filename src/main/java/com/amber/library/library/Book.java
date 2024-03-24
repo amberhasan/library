@@ -4,7 +4,9 @@ public class Book {
     Number id;
     String title;
     String authors;
-
+    String isbn;
+    Number dewey;
+    Number publisherId;
     public Number getId() {
         return id;
     }
@@ -29,11 +31,11 @@ public class Book {
         this.authors = authors;
     }
 
-    public Number getIsbn() {
+    public String getIsbn() {
         return isbn;
     }
 
-    public void setIsbn(Number isbn) {
+    public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
 
@@ -53,11 +55,9 @@ public class Book {
         this.publisherId = publisherId;
     }
 
-    Number isbn;
-    Number dewey;
-    Number publisherId;
 
-    public Book(Number id, String title, String authors, Number isbn, Number dewey, Number publisherId) {
+
+    public Book(Number id, String title, String authors, String isbn, Number dewey, Number publisherId) {
         this.id = id;
         this.title = title;
         this.authors = authors;

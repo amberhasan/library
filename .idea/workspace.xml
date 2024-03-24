@@ -6,11 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="c70044f5-c564-4f6a-a9e5-4ebdc5b009fb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/Book.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/DBMgr.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/DBMgr.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/HelloController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/HelloController.java" afterDir="false" />
     </list>
     <list id="9ea1c41c-e1a3-4a4c-9db8-924fda1b2467" name="Changes by Junaid" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/DBMgr.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/DBMgr.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/HelloController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/HelloController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,12 +22,11 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="LineStatusTrackerManager">
-    <file path="$PROJECT_DIR$/src/main/java/com/amber/library/library/DBMgr.java">
+    <file path="$PROJECT_DIR$/src/main/java/com/amber/library/library/HelloController.java">
       <ranges>
-        <range start1="78" end1="79" start2="78" end2="79" changelist="c70044f5-c564-4f6a-a9e5-4ebdc5b009fb" />
-        <range start1="88" end1="88" start2="88" end2="92" changelist="c70044f5-c564-4f6a-a9e5-4ebdc5b009fb" />
-        <range start1="97" end1="98" start2="101" end2="102" changelist="9ea1c41c-e1a3-4a4c-9db8-924fda1b2467" />
-        <range start1="145" end1="145" start2="149" end2="191" changelist="c70044f5-c564-4f6a-a9e5-4ebdc5b009fb" />
+        <range start1="183" end1="184" start2="183" end2="184" changelist="9ea1c41c-e1a3-4a4c-9db8-924fda1b2467" />
+        <range start1="198" end1="198" start2="198" end2="199" changelist="9ea1c41c-e1a3-4a4c-9db8-924fda1b2467" />
+        <range start1="206" end1="207" start2="207" end2="208" changelist="c70044f5-c564-4f6a-a9e5-4ebdc5b009fb" />
       </ranges>
     </file>
   </component>
