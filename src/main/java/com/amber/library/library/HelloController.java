@@ -177,8 +177,13 @@ public class HelloController {
     @FXML
     void onSearch() {
         String searchQuery = titleTextField.getText().trim();
-        ObservableList<Book> searchResults = dbMgr.searchBooks(searchQuery);
-        booksTableView.setItems(searchResults);
+        if(searchQuery.isEmpty()){
+            initializeTableView();
+        }else{
+            ObservableList<Book> searchResults = dbMgr.searchBooks(searchQuery);
+            booksTableView.setItems(searchResults);
+        }
+
     }
 
 
@@ -222,42 +227,42 @@ public class HelloController {
         booksTableView.setItems(allBooks); // Update the TableView
     }
     private ObservableList<Book> getBooks() {
-        ObservableList<Book> books = FXCollections.observableArrayList();
+        ObservableList<Book> books = dbMgr.getBooks();
 
-        DBMgr dbManager = DBMgr.getInstance();
-        Connection conn = dbManager.getConnection();
-
-        String query = """
-    SELECT b.BookID, b.ISBN, b.DeweyDecimalSystemNumber, p.Title, CONCAT(a.FirstName, ' ', COALESCE(a.MiddleName, ''), ' ', a.LastName) AS AuthorName, p.PublicationDate, pb.NumberOfPages, pb.Language, pb.Genre
-    FROM Book b
-    JOIN Publication p ON b.PublicationID = p.PublicationID
-    JOIN BookAuthor ba ON b.BookID = ba.BookID
-    JOIN Author a ON ba.AuthorID = a.AuthorID
-    JOIN PhysicalBook pb ON b.BookID = pb.BookID
-    """;
-
-        try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-
-            while (rs.next()) {
-                int id = rs.getInt("BookID");
-                String title = rs.getString("Title");
-                String authorName = rs.getString("AuthorName");
-                String isbn = rs.getString("ISBN");
-                String dewey = rs.getString("DeweyDecimalSystemNumber");
-                // Handle potential null values explicitly
-                authorName = authorName != null ? authorName : "null";
-                int publicationYear = rs.getDate("PublicationDate") != null ? rs.getDate("PublicationDate").toLocalDate().getYear() : 0; // Use 0 or some default for null publicationYear
-                int numberOfPages = rs.getInt("NumberOfPages");
-                String genre = rs.getString("Genre");
-                genre = genre != null ? genre : "null";
-
-                // Assuming your Book class has a constructor that matches these fields and handles nulls
-                books.add(new Book(id, title, authorName, isbn, dewey, 1)); // Adjust constructor call as necessary
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//        DBMgr dbManager = DBMgr.getInstance();
+//        Connection conn = dbManager.getConnection();
+//
+//        String query = """
+//    SELECT b.BookID, b.ISBN, b.DeweyDecimalSystemNumber, p.Title, CONCAT(a.FirstName, ' ', COALESCE(a.MiddleName, ''), ' ', a.LastName) AS AuthorName, p.PublicationDate, pb.NumberOfPages, pb.Language, pb.Genre
+//    FROM Book b
+//    JOIN Publication p ON b.PublicationID = p.PublicationID
+//    JOIN BookAuthor ba ON b.BookID = ba.BookID
+//    JOIN Author a ON ba.AuthorID = a.AuthorID
+//    JOIN PhysicalBook pb ON b.BookID = pb.BookID
+//    """;
+//
+//        try (Statement stmt = conn.createStatement();
+//             ResultSet rs = stmt.executeQuery(query)) {
+//
+//            while (rs.next()) {
+//                int id = rs.getInt("BookID");
+//                String title = rs.getString("Title");
+//                String authorName = rs.getString("AuthorName");
+//                String isbn = rs.getString("ISBN");
+//                String dewey = rs.getString("DeweyDecimalSystemNumber");
+//                // Handle potential null values explicitly
+//                authorName = authorName != null ? authorName : "null";
+//                int publicationYear = rs.getDate("PublicationDate") != null ? rs.getDate("PublicationDate").toLocalDate().getYear() : 0; // Use 0 or some default for null publicationYear
+//                int numberOfPages = rs.getInt("NumberOfPages");
+//                String genre = rs.getString("Genre");
+//                genre = genre != null ? genre : "null";
+//
+//                // Assuming your Book class has a constructor that matches these fields and handles nulls
+//                books.add(new Book(id, title, authorName, isbn, dewey, 1)); // Adjust constructor call as necessary
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
 
         return books;
     }
