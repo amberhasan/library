@@ -296,7 +296,7 @@ public class DBMgr {
         ObservableList<Book> books = FXCollections.observableArrayList();
         Connection conn = getConnection();
         String sql = """
-        SELECT b.BookID, p.Title, CONCAT(a.FirstName, ' ', COALESCE(a.MiddleName, ''), ' ', a.LastName) AS AuthorName, 
+        SELECT b.BookID, b.ISBN,b.DeweyDecimalSystemNumber, p.Title, CONCAT(a.FirstName, ' ', COALESCE(a.MiddleName, ''), ' ', a.LastName) AS AuthorName, 
         p.PublicationDate, pb.NumberOfPages, pb.Language, pb.Genre
         FROM Book b
         JOIN Publication p ON b.PublicationID = p.PublicationID
