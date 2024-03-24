@@ -126,6 +126,7 @@ public class HelloController {
             showAlert("Error", "Please select a book to delete.", true);
         }
         refreshBooks();
+        onClear(null);
     }
 
 

@@ -5,16 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c70044f5-c564-4f6a-a9e5-4ebdc5b009fb" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/Book.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/DBMgr.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/DBMgr.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/HelloController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/HelloController.java" afterDir="false" />
     </list>
-    <list id="9ea1c41c-e1a3-4a4c-9db8-924fda1b2467" name="Changes by Junaid" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/Book.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/DBMgr.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/DBMgr.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/HelloController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/HelloController.java" afterDir="false" />
-    </list>
+    <list id="9ea1c41c-e1a3-4a4c-9db8-924fda1b2467" name="Changes by Junaid" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -22,41 +15,6 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="LineStatusTrackerManager">
-    <file path="$PROJECT_DIR$/src/main/java/com/amber/library/library/DBMgr.java">
-      <ranges>
-        <range start1="128" end1="128" start2="128" end2="169" changelist="9ea1c41c-e1a3-4a4c-9db8-924fda1b2467" />
-        <range start1="171" end1="192" start2="212" end2="212" changelist="c70044f5-c564-4f6a-a9e5-4ebdc5b009fb" />
-        <range start1="293" end1="293" start2="313" end2="315" changelist="c70044f5-c564-4f6a-a9e5-4ebdc5b009fb" />
-        <range start1="296" end1="297" start2="318" end2="319" changelist="c70044f5-c564-4f6a-a9e5-4ebdc5b009fb" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/src/main/java/com/amber/library/library/Book.java">
-      <ranges>
-        <range start1="3" end1="9" start2="3" end2="11" changelist="9ea1c41c-e1a3-4a4c-9db8-924fda1b2467" />
-        <range start1="41" end1="42" start2="43" end2="44" changelist="c70044f5-c564-4f6a-a9e5-4ebdc5b009fb" />
-        <range start1="45" end1="46" start2="47" end2="48" changelist="c70044f5-c564-4f6a-a9e5-4ebdc5b009fb" />
-        <range start1="57" end1="57" start2="59" end2="62" changelist="9ea1c41c-e1a3-4a4c-9db8-924fda1b2467" />
-        <range start1="58" end1="58" start2="63" end2="66" changelist="9ea1c41c-e1a3-4a4c-9db8-924fda1b2467" />
-        <range start1="59" end1="60" start2="67" end2="68" changelist="c70044f5-c564-4f6a-a9e5-4ebdc5b009fb" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/src/main/java/com/amber/library/library/HelloController.java">
-      <ranges>
-        <range start1="58" end1="58" start2="58" end2="64" changelist="9ea1c41c-e1a3-4a4c-9db8-924fda1b2467" />
-        <range start1="73" end1="74" start2="79" end2="80" changelist="9ea1c41c-e1a3-4a4c-9db8-924fda1b2467" />
-        <range start1="80" end1="80" start2="86" end2="95" changelist="9ea1c41c-e1a3-4a4c-9db8-924fda1b2467" />
-        <range start1="89" end1="90" start2="104" end2="106" changelist="c70044f5-c564-4f6a-a9e5-4ebdc5b009fb" />
-        <range start1="133" end1="138" start2="149" end2="164" changelist="9ea1c41c-e1a3-4a4c-9db8-924fda1b2467" />
-        <range start1="139" end1="139" start2="165" end2="168" changelist="9ea1c41c-e1a3-4a4c-9db8-924fda1b2467" />
-        <range start1="140" end1="141" start2="169" end2="169" changelist="c70044f5-c564-4f6a-a9e5-4ebdc5b009fb" />
-        <range start1="170" end1="170" start2="198" end2="216" changelist="9ea1c41c-e1a3-4a4c-9db8-924fda1b2467" />
-        <range start1="183" end1="184" start2="229" end2="230" changelist="c70044f5-c564-4f6a-a9e5-4ebdc5b009fb" />
-        <range start1="199" end1="199" start2="245" end2="246" changelist="c70044f5-c564-4f6a-a9e5-4ebdc5b009fb" />
-        <range start1="207" end1="208" start2="254" end2="255" changelist="c70044f5-c564-4f6a-a9e5-4ebdc5b009fb" />
-      </ranges>
-    </file>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
