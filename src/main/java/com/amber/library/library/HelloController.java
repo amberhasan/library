@@ -142,11 +142,34 @@ public class HelloController {
             String dewey = deweyTextField.getText().trim();
             Publisher publisher = publisherComboBox.getValue();
 
-            // Validate inputs
-            if (title.isEmpty() || authorName.isEmpty() || isbn.isEmpty() || dewey.isEmpty() || publisher == null) {
-                showAlert("Validation Error", "All fields are required.", true);
+            // Validate inputs and collect error messages
+            StringBuilder errors = new StringBuilder();
+            String validationResult = null;
+
+            validationResult = Validator.validateNotEmpty(title, "Title");
+            if (validationResult != null) errors.append(validationResult).append("\n");
+
+            // New validation for title to be alphanumeric
+            validationResult = Validator.validateTitleAlphanumeric(title);
+            if (validationResult != null) errors.append(validationResult).append("\n");
+
+            validationResult = Validator.validateNotEmpty(authorName, "Author Name");
+            if (validationResult != null) errors.append(validationResult).append("\n");
+
+            validationResult = Validator.validateISBN(isbn);
+            if (validationResult != null) errors.append(validationResult).append("\n");
+
+            validationResult = Validator.validateDewey(dewey);
+            if (validationResult != null) errors.append(validationResult).append("\n");
+
+            if (publisher == null) errors.append("Publisher must be selected.\n");
+
+            // Check if there were any errors
+            if (!errors.isEmpty()) {
+                showAlert("Validation Error", errors.toString(), true);
                 return; // Exit the method if validation fails
             }
+
 
             if(mode.equals("Update")){
                 if (dbMgr.updateBook(title, publisher.getId(), bookToUpdate)) {
