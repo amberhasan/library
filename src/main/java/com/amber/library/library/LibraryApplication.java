@@ -18,10 +18,6 @@ public class LibraryApplication extends Application {
      * Starts the JavaFX application by setting up the primary stage.
      * This method loads the FXML layout for the initial view of the application, sets the scene on the primary stage,
      * and then displays the stage. The FXML file defines the layout and controls for the application's user interface.
-     *
-     * @param stage The primary stage for this application, onto which the application scene can be set.
-     *              The primary stage is created by the platform itself and passed to this method.
-     * @throws IOException If the FXML file cannot be loaded.
      */
     @Override
     public void start(Stage stage) throws IOException {

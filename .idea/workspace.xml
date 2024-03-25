@@ -6,14 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c70044f5-c564-4f6a-a9e5-4ebdc5b009fb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/Book.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/DBMgr.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/DBMgr.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/LibraryApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/HelloController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/LibraryController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/Publisher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/Publisher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/Validator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/Validator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/amber/library/library/hello-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/amber/library/library/hello-view.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/amber/library/library/LibraryApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/amber/library/library/LibraryApplication.java" afterDir="false" />
     </list>
     <list id="9ea1c41c-e1a3-4a4c-9db8-924fda1b2467" name="Changes by Junaid" comment="" />
     <option name="SHOW_DIALOG" value="false" />
