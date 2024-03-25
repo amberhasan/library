@@ -1,19 +1,27 @@
+/**
+ * LibraryController for Library Application.
+ *
+ * This class controls the GUI for a library management system, allowing the user to manage books and publishers.
+ * It provides functionalities to add, delete, and search for books, as well as to clear input fields and refresh the books list.
+ * The GUI elements are defined in FXML and this controller binds the data to these elements and handles user interactions.
+ *
+ * Written by Amber Hasan (amh130430) for CS 6360.MS1, starting on 3/1/2024.
+ * The purpose of this class is to fulfill the assignment requirements by implementing a JavaFX application
+ * that interacts with a database to manage a library's book inventory.
+ *
+ * @version 1.0
+ */
+
 package com.amber.library.library;
 
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.collections.FXCollections;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+public class LibraryController {
 
-public class HelloController {
-
+    // GUI component bindings
     @FXML
     private TableColumn<String, Number> authorsColumn;
 
@@ -22,12 +30,6 @@ public class HelloController {
 
     @FXML
     private TableView<Book> booksTableView;
-
-    @FXML
-    private Button clearBtn;
-
-    @FXML
-    private Button deleteBtn;
 
     @FXML
     private TextField deweyTextField;
@@ -42,38 +44,38 @@ public class HelloController {
     private ComboBox<Publisher> publisherComboBox;
 
     @FXML
-    private Button saveBtn;
-
-    @FXML
-    private Button searchBtn;
-
-    @FXML
     private TableColumn<Book, String> titleColumn;
 
     @FXML
     private TextField titleTextField;
 
+    // Database manager instance for DB operations
     private final DBMgr dbMgr;
-
     private ObservableList<Book> books;
-
     private  String mode = "Insert";
-
     ObservableList<Publisher> publisherList;
-
     private Book bookToUpdate;
 
 
-    public HelloController() {
+    /**
+     * Constructor initializes the database manager.
+     */
+    public LibraryController() {
         dbMgr = DBMgr.getInstance();
     }
 
+    /**
+     * Initializes the publishers ComboBox and TableView on GUI start-up.
+     */
     @FXML
     private void initialize() {
         initializePublishers();
         initializeTableView();
     }
 
+    /**
+     * Fetches and displays the list of publishers in the publisherComboBox.
+     */
     public void initializePublishers() {
         try {
 
@@ -85,17 +87,26 @@ public class HelloController {
 
     }
 
+    /**
+     * Retrieves a Publisher object based on its ID.
+     *
+     * @param id The unique ID of the publisher.
+     * @return The Publisher object if found, null otherwise.
+     */
     public Publisher getPublisher(int id){
         for (Publisher publisher : publisherList) {
-            if (publisher.getId() == id) { // Assuming getId() method exists
+            if (publisher.getId() == id) {
                 return publisher;
             }
         }
-        return null; // Return null or throw an exception if not found
+        return null;
     }
 
+    /**
+     * Clears all input fields and resets the form to its default state.
+     */
     @FXML
-    void onClear(ActionEvent event) {
+    void onClear() {
         System.out.println("onClear");
         // Clear text fields
         titleTextField.setText("");
@@ -108,8 +119,11 @@ public class HelloController {
         publisherComboBox.setValue(null);
     }
 
+    /**
+     * Deletes the selected book from the database and updates the books list.
+     */
     @FXML
-    void onDelete(ActionEvent event) {
+    void onDelete() {
         Book selectedBook = booksTableView.getSelectionModel().getSelectedItem();
         if (selectedBook != null) {
             boolean isDeleted = DBMgr.getInstance().deleteBookAndReferences((Integer) selectedBook.getId());
@@ -126,13 +140,14 @@ public class HelloController {
             showAlert("Error", "Please select a book to delete.", true);
         }
         refreshBooks();
-        onClear(null);
+        onClear();
     }
 
-
-
+    /**
+     * Deletes the selected book from the database and updates the books list.
+     */
     @FXML
-    void onSave(ActionEvent event) {
+    void onSave() {
         System.out.println("onSave");
         try {
             // Collect input values
@@ -142,14 +157,12 @@ public class HelloController {
             String dewey = deweyTextField.getText().trim();
             Publisher publisher = publisherComboBox.getValue();
 
-            // Validate inputs and collect error messages
             StringBuilder errors = new StringBuilder();
             String validationResult = null;
 
             validationResult = Validator.validateNotEmpty(title, "Title");
             if (validationResult != null) errors.append(validationResult).append("\n");
 
-            // New validation for title to be alphanumeric
             validationResult = Validator.validateTitleAlphanumeric(title);
             if (validationResult != null) errors.append(validationResult).append("\n");
 
@@ -170,9 +183,8 @@ public class HelloController {
                 return; // Exit the method if validation fails
             }
 
-
             if(mode.equals("Update")){
-                if (dbMgr.updateBook(title, publisher.getId(), bookToUpdate)) {
+                if (dbMgr.updateBook(title, bookToUpdate)) {
                     showAlert("Success", "Data updated successfully.", false);
                     booksTableView.setItems(getBooks()); // Refresh the TableView
                 } else {
@@ -187,16 +199,16 @@ public class HelloController {
                     showAlert("Failed", "Data not saved successfully.", true);
                 }
             }
-
-
-            onClear(null);
-
+            onClear();
         } catch (Exception ex) {
             System.out.println("onSave failed " + ex.getMessage());
         }
         refreshBooks();
     }
 
+    /**
+     * Searches for books based on the title entered in the titleTextField.
+     */
     @FXML
     void onSearch() {
         String searchQuery = titleTextField.getText().trim();
@@ -209,7 +221,13 @@ public class HelloController {
 
     }
 
-
+    /**
+     * Displays an alert dialog to the user.
+     *
+     * @param title The title of the alert.
+     * @param message The message to display in the alert.
+     * @param isError Determines if the alert is an error message or information message.
+     */
     private void showAlert(String title, String message, Boolean isError) {
         Alert alert = new Alert(isError ? Alert.AlertType.ERROR : Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -218,6 +236,9 @@ public class HelloController {
         alert.showAndWait();
     }
 
+    /**
+     * Initializes and populates the TableView with books.
+     */
     public void initializeTableView() {
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         isbnColumn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
@@ -245,51 +266,20 @@ public class HelloController {
         });
     }
 
+    /**
+     * Refreshes the books displayed in the TableView by fetching them again from the database.
+     */
     public void refreshBooks() {
         ObservableList<Book> allBooks = getBooks(); // Fetch all books
         booksTableView.setItems(allBooks); // Update the TableView
     }
+
+    /**
+     * Fetches all books from the database.
+     *
+     * @return An ObservableList of Book objects.
+     */
     private ObservableList<Book> getBooks() {
-        ObservableList<Book> books = dbMgr.getBooks();
-
-//        DBMgr dbManager = DBMgr.getInstance();
-//        Connection conn = dbManager.getConnection();
-//
-//        String query = """
-//    SELECT b.BookID, b.ISBN, b.DeweyDecimalSystemNumber, p.Title, CONCAT(a.FirstName, ' ', COALESCE(a.MiddleName, ''), ' ', a.LastName) AS AuthorName, p.PublicationDate, pb.NumberOfPages, pb.Language, pb.Genre
-//    FROM Book b
-//    JOIN Publication p ON b.PublicationID = p.PublicationID
-//    JOIN BookAuthor ba ON b.BookID = ba.BookID
-//    JOIN Author a ON ba.AuthorID = a.AuthorID
-//    JOIN PhysicalBook pb ON b.BookID = pb.BookID
-//    """;
-//
-//        try (Statement stmt = conn.createStatement();
-//             ResultSet rs = stmt.executeQuery(query)) {
-//
-//            while (rs.next()) {
-//                int id = rs.getInt("BookID");
-//                String title = rs.getString("Title");
-//                String authorName = rs.getString("AuthorName");
-//                String isbn = rs.getString("ISBN");
-//                String dewey = rs.getString("DeweyDecimalSystemNumber");
-//                // Handle potential null values explicitly
-//                authorName = authorName != null ? authorName : "null";
-//                int publicationYear = rs.getDate("PublicationDate") != null ? rs.getDate("PublicationDate").toLocalDate().getYear() : 0; // Use 0 or some default for null publicationYear
-//                int numberOfPages = rs.getInt("NumberOfPages");
-//                String genre = rs.getString("Genre");
-//                genre = genre != null ? genre : "null";
-//
-//                // Assuming your Book class has a constructor that matches these fields and handles nulls
-//                books.add(new Book(id, title, authorName, isbn, dewey, 1)); // Adjust constructor call as necessary
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-
-        return books;
+        return dbMgr.getBooks();
     }
-
-
-
 }
